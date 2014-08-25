@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<debug>
+
+	<!-- 联众ID -->
+	<option name="ourgameID">lx0025</option>
+	<!-- 用户名 -->
+	<option name="username">lx0025</option>
+	<!-- 角色名 -->
+	<option name="rolename">lx0025</option>
+	<!-- 昵称 -->
+	<option name="nickname">lx0025</option>
+	<!-- 证书 -->
+	<option name="ticket">
+	</option>
+
+	<!-- 渠道号 -->
+	<option name="channelID">0</option>
+
+	<!-- 服务器地址 -->
+	<option name="ServerHost">172.28.41.28</option> 
+	<!-- 服务器端口 -->
+	<option name="ServerPort">22411</option>
+
+	<!-- 公共聊天服务器地址 -->
+	<option name="ChatServerHost">172.28.41.20</option>
+	<!-- 公共聊天服务器端口 -->
+	<option name="ChatServerPort">22376</option>
+
+</debug>

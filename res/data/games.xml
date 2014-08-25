@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<games>
+
+	<!-- 血流成河 -->
+	<game id="0" name="BloodRiver" description="血流成河" channelID="*" path="D:\Flash Builder Work Spaces\MahjongWorld\BloodRiver\bin\">BloodRiver.xml</game>
+	
+</games>

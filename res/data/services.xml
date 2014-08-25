@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<services>
+
+	<!-- 服务器地址 -->
+	<option name="ServerHost">172.28.41.28</option><!-- 线上：115.182.20.204 内网：172.28.41.28-->
+	<!-- 服务器端口 -->
+	<option name="ServerPort">22411</option>
+	
+	<!-- 公共聊天服务器地址 -->
+	<option name="ChatServerHost">172.28.41.20</option><!-- 线上：202.108.32.52 -->
+	<!-- 公共聊天服务器端口 -->
+	<option name="ChatServerPort">22376</option>
+	
+	<!-- 用户默认头像 -->
+	<option name="HeadImageDefault">images/Head.png</option>
+	<!-- 用户头像服务 -->
+	<option name="HeadImageApi">http://hyapp.gfs.lianzhong.com/AvatarServer/services/GetAvatar.ashx</option>
+	
+</services>
