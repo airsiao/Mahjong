@@ -70,5 +70,11 @@ package com.ourgame.mahjong.lobby.method
 		 */
 		public static const NOTICE:String = BASE + "NOTICE";
 	
+	/**
+	 * 进入房间
+	 * params RoomInfo 房间对象
+	 */
+		 //		public static const ENTER_ROOM:String = BASE + "ENTER_ROOM";
+	
 	}
 }

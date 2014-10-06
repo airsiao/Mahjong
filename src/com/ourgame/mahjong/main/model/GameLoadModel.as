@@ -59,6 +59,8 @@ package com.ourgame.mahjong.main.model
 		
 		public function load(game:GameInfo):void
 		{
+			Log.debug("加载游戏：", game.name);
+			
 			this.loader.load(game);
 		}
 		

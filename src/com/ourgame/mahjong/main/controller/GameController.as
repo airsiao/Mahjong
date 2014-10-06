@@ -4,7 +4,7 @@ package com.ourgame.mahjong.main.controller
 	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.ourgame.mahjong.main.method.MainMethod;
 	import com.ourgame.mahjong.main.model.GameLoadModel;
-	import com.ourgame.mahjong.table.state.TableState;
+	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.core.AssetsManager;
 	import com.wecoit.data.XmlValue;
 	import com.wecoit.mvc.Controller;
@@ -48,6 +48,8 @@ package com.ourgame.mahjong.main.controller
 			this.register(MainMethod.LOAD_GAME, LOAD_GAME);
 			this.register(MainMethod.LOAD_GAME_ERROR, LOAD_GAME_ERROR);
 			this.register(MainMethod.LOAD_GAME_COMPLETE, LOAD_GAME_COMPLETE);
+			
+			this.register(RoomMethod.ENTER_TABLE_SUCCESS, ENTER_TABLE_SUCCESS);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 函数
@@ -56,7 +58,7 @@ package com.ourgame.mahjong.main.controller
 		{
 			var gameID:uint = notice.params;
 			
-			if (current == null || current.id != gameID)
+			if (this.current == null || this.current.id != gameID)
 			{
 				var gameList:Vector.<XmlValue> = AssetsManager.instance.getConfig("Games").getOptions("id", gameID);
 				
@@ -71,7 +73,7 @@ package com.ourgame.mahjong.main.controller
 			}
 			else
 			{
-				this.play(current);
+				this.notify(MainMethod.LOAD_GAME_COMPLETE, this.current);
 			}
 		}
 		
@@ -84,19 +86,11 @@ package com.ourgame.mahjong.main.controller
 		private function LOAD_GAME_COMPLETE(notice:INotice):void
 		{
 			this.current = notice.params;
-			
-			if (this.current.main.hasOwnProperty("info"))
-			{
-				this.current.main["info"] = this.current;
-			}
-			
-			this.play(this.current);
 		}
 		
-		private function play(game:GameInfo):void
+		private function ENTER_TABLE_SUCCESS(notice:INotice):void
 		{
-			(this.context as State).manager.switchState(TableState);
-			((this.context as State).manager as Main).addChild(game.main);
+			((this.context as State).manager as Main).addChild(this.current.main);
 		}
 	
 	}

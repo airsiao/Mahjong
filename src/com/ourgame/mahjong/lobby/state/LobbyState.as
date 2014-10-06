@@ -3,6 +3,7 @@ package com.ourgame.mahjong.lobby.state
 	import com.ourgame.mahjong.lobby.controller.LobbyController;
 	import com.ourgame.mahjong.lobby.controller.LobbySocketController;
 	import com.ourgame.mahjong.room.state.RoomState;
+	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.State;
 	
 	/**
@@ -43,6 +44,8 @@ package com.ourgame.mahjong.lobby.state
 		
 		override public function onEnter():void
 		{
+			Log.debug("进入大厅");
+			
 			this.addController(new LobbySocketController());
 			this.addController(new LobbyController());
 		}

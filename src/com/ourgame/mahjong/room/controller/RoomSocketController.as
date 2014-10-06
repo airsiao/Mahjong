@@ -1,16 +1,24 @@
 package com.ourgame.mahjong.room.controller
 {
+	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.DataExchange;
+	import com.ourgame.mahjong.libaray.enum.RoomType;
+	import com.ourgame.mahjong.libaray.vo.TableInfo;
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
 	import com.ourgame.mahjong.main.method.SocketMethod;
 	import com.ourgame.mahjong.main.model.MainSocketModel;
 	import com.ourgame.mahjong.message.CReqEnterTable;
 	import com.ourgame.mahjong.message.CReqLeaveRoom;
+	import com.ourgame.mahjong.message.CReqStandBy;
 	import com.ourgame.mahjong.message.CReqTables;
+	import com.ourgame.mahjong.message.NtfInviteTable;
+	import com.ourgame.mahjong.message.SAckEnterTable;
+	import com.ourgame.mahjong.message.SAckStandBy;
 	import com.ourgame.mahjong.protocol.MJRoomProtocol;
 	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.Controller;
+	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	
 	/**
@@ -31,7 +39,7 @@ package com.ourgame.mahjong.room.controller
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
-		private var center:DataExchange;
+		private var data:DataExchange;
 		
 		private var socket:MainSocketModel;
 		
@@ -58,7 +66,7 @@ package com.ourgame.mahjong.room.controller
 			this.register(RoomMethod.QUICK_START, QUICK_START);
 			this.register(RoomMethod.TABLE_INFO, TABLE_INFO);
 			
-			this.center = this.context.getModel(DataExchange) as DataExchange;
+			this.data = ((this.context as State).manager as Main).info.data;
 			this.socket = this.context.getModel(MainSocketModel) as MainSocketModel;
 		}
 		
@@ -72,7 +80,7 @@ package com.ourgame.mahjong.room.controller
 		private function LEAVE_ROOM(notice:INotice):void
 		{
 			var body:CReqLeaveRoom = new CReqLeaveRoom();
-			body.roomId = this.center.room.id;
+			body.roomId = this.data.room.id;
 			
 			Log.debug("发送离开房间请求", body);
 			
@@ -82,7 +90,7 @@ package com.ourgame.mahjong.room.controller
 		private function TABLE_LIST(notice:INotice):void
 		{
 			var body:CReqTables = new CReqTables();
-			body.roomId = this.center.room.id;
+			body.roomId = this.data.room.id;
 			
 			Log.debug("发送获取桌子列表请求", body);
 			
@@ -92,7 +100,7 @@ package com.ourgame.mahjong.room.controller
 		private function ENTER_TABLE(notice:INotice):void
 		{
 			var body:CReqEnterTable = new CReqEnterTable();
-			body.roomId = this.center.room.id;
+			body.roomId = this.data.room.id;
 			body.tableId = notice.params;
 			
 			Log.debug("发送进入桌子请求", body);
@@ -102,8 +110,11 @@ package com.ourgame.mahjong.room.controller
 		
 		private function STAND_BY(notice:INotice):void
 		{
-			// TODO Auto Generated method stub
-		
+			var body:CReqStandBy = new CReqStandBy();
+			
+			Log.debug("发送准备请求", body);
+			
+			this.socket.send(MJRoomProtocol.CLIENT + MJRoomProtocol.OGID_STAND_BY, body);
 		}
 		
 		private function QUICK_START(notice:INotice):void
@@ -182,14 +193,48 @@ package com.ourgame.mahjong.room.controller
 		
 		private function ON_TABLE_ENTER(data:MJDataPack):void
 		{
-			// TODO Auto Generated method stub
-		
+			var body:SAckEnterTable = new SAckEnterTable();
+			body.mergeFrom(data.body);
+			
+			Log.debug("请求进入桌子结果", body);
+			
+			if (body.result == 0)
+			{
+				if (this.data.room.type == RoomType.AUTO)
+				{
+					this.data.table = new TableInfo(body.tableId);
+				}
+				else
+				{
+					this.data.table = this.data.room.getTableByID(body.tableId);
+				}
+				
+				this.notify(RoomMethod.ENTER_TABLE_SUCCESS);
+			}
+			else
+			{
+				Log.error("进入桌子失败原因", body.failReason);
+				
+				this.notify(RoomMethod.ENTER_TABLE_ERROR, body.result);
+			}
 		}
 		
 		private function ON_STAND_BY(data:MJDataPack):void
 		{
-			// TODO Auto Generated method stub
-		
+			var body:SAckStandBy = new SAckStandBy();
+			body.mergeFrom(data.body);
+			
+			Log.debug("请求准备结果", body);
+			
+			if (body.result == 0)
+			{
+				this.notify(RoomMethod.STAND_BY_SUCCESS);
+			}
+			else
+			{
+				Log.error("请求准备失败原因", body.failReason);
+				this.notify(RoomMethod.STAND_BY_ERROR, body.result);
+			}
 		}
 		
 		private function ON_TABLE_PLAYER_COUNT(data:MJDataPack):void
@@ -224,8 +269,12 @@ package com.ourgame.mahjong.room.controller
 		
 		private function ON_TABLE_INVITE(data:MJDataPack):void
 		{
-			// TODO Auto Generated method stub
-		
+			var body:NtfInviteTable = new NtfInviteTable();
+			body.mergeFrom(data.body);
+			
+			Log.debug("收到桌子邀请", body);
+			
+			this.notify(RoomMethod.ENTER_TABLE, body.tableId);
 		}
 	
 		// -------------------------------------------------------------------------------------------------------- 函数

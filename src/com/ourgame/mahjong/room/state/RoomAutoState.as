@@ -1,16 +1,13 @@
-package com.ourgame.mahjong.table.state
+package com.ourgame.mahjong.room.state
 {
-	import com.ourgame.mahjong.table.controller.TableController;
-	import com.ourgame.mahjong.table.controller.TableSocketController;
-	import com.ourgame.mahjong.table.model.TableModel;
-	import com.wecoit.debug.Log;
+	import com.ourgame.mahjong.room.controller.RoomAutoController;
 	import com.wecoit.mvc.State;
 	
 	/**
-	 * 桌子状态
+	 * 自动配桌房间状态
 	 * @author SiaoLeon
 	 */
-	public class TableState extends State
+	public class RoomAutoState extends State
 	{
 		// -------------------------------------------------------------------------------------------------------- 静态常量
 		
@@ -29,7 +26,7 @@ package com.ourgame.mahjong.table.state
 		/**
 		 * 构造函数
 		 */
-		public function TableState(key:Object=null)
+		public function RoomAutoState(key:Object=null)
 		{
 			super(key);
 		}
@@ -38,12 +35,7 @@ package com.ourgame.mahjong.table.state
 		
 		override public function onEnter():void
 		{
-			Log.info("进入桌子状态");
-			
-			this.addModel(TableModel);
-			
-			this.addController(new TableController());
-			this.addController(new TableSocketController());
+			this.addController(new RoomAutoController());
 		}
 	
 		// -------------------------------------------------------------------------------------------------------- 函数

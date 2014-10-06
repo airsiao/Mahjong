@@ -2,7 +2,7 @@
 <services>
 
 	<!-- 服务器地址 -->
-	<option name="ServerHost">172.28.41.28</option><!-- 线上：115.182.20.204 内网：172.28.41.28-->
+	<option name="ServerHost">172.28.14.82</option><!-- 线上：115.182.20.204 内网：172.28.14.82-->
 	<!-- 服务器端口 -->
 	<option name="ServerPort">22411</option>
 	

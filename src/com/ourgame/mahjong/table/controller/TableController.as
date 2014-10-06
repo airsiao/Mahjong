@@ -1,6 +1,10 @@
 package com.ourgame.mahjong.table.controller
 {
+	import com.ourgame.mahjong.Main;
+	import com.ourgame.mahjong.table.method.TableMethod;
 	import com.wecoit.mvc.Controller;
+	import com.wecoit.mvc.State;
+	import com.wecoit.mvc.core.INotice;
 	
 	/**
 	 * 桌子控制器
@@ -29,10 +33,20 @@ package com.ourgame.mahjong.table.controller
 		{
 			super();
 		}
-	
+		
 		// -------------------------------------------------------------------------------------------------------- 方法
-	
+		
+		override public function onAdd():void
+		{
+			this.register(TableMethod.GAME_INVITE, GAME_INVITE);
+		}
+		
 		// -------------------------------------------------------------------------------------------------------- 函数
+		
+		private function GAME_INVITE(notice:INotice):void
+		{
+			((this.context as State).manager as Main).info.data.gameProxy.start();
+		}
 	
 	}
 }

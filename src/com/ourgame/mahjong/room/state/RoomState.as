@@ -33,6 +33,9 @@ package com.ourgame.mahjong.room.state
 		{
 			super(key);
 			
+			this.add(new RoomAutoState());
+			this.add(new RoomManualState());
+			
 			this.add(new TableState());
 		}
 		

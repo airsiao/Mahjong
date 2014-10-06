@@ -2,8 +2,6 @@ package com.ourgame.mahjong.lobby.controller
 {
 	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.DataExchange;
-	import com.ourgame.mahjong.libaray.enum.GameType;
-	import com.ourgame.mahjong.libaray.enum.RoomType;
 	import com.ourgame.mahjong.libaray.vo.ChatInfo;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
@@ -257,18 +255,6 @@ package com.ourgame.mahjong.lobby.controller
 		
 		private function ON_LOGIN(data:MJDataPack):void
 		{
-			//TODO
-			this.data.user.nickname = "AAAA";
-			this.data.user.id = 1;
-			this.data.user.coins = 1000000;
-			this.data.user.experience = 0;
-			this.data.user.level = 0;
-			this.data.user.masterScore = 100;
-			
-			this.notify(LobbyMethod.LOGIN_SUCCESS);
-			
-			return;
-			
 			var body:SAckLogin = new SAckLogin();
 			body.mergeFrom(data.body);
 			
@@ -291,7 +277,7 @@ package com.ourgame.mahjong.lobby.controller
 			}
 			else
 			{
-				Log.debug("登录失败原因", body.failReason);
+				Log.error("登录失败原因", body.failReason);
 				this.notify(LobbyMethod.LOGIN_ERROR, body.result);
 			}
 		}
@@ -335,21 +321,6 @@ package com.ourgame.mahjong.lobby.controller
 		
 		private function ON_ROOM_LIST(data:MJDataPack):void
 		{
-			//TODO
-			this.data.roomList.clear();
-			
-			var r:RoomInfo = new RoomInfo(5);
-			r.name = "A";
-			r.gameType = GameType.BloodRiver;
-			
-			this.data.roomList.add(r);
-			
-			this.notify(RoomMethod.ROOM_LIST_SUCCESS);
-			
-			this.notify(RoomMethod.ENTER_ROOM, 5);
-			
-			return;
-			
 			var body:SAckRoomList = new SAckRoomList();
 			body.mergeFrom(data.body);
 			
@@ -357,9 +328,8 @@ package com.ourgame.mahjong.lobby.controller
 			
 			this.data.roomList.clear();
 			
-			while (body.rooms.length > 0)
+			for each (var room:Room in body.rooms)
 			{
-				var room:Room = body.rooms.shift();
 				var info:RoomInfo = new RoomInfo(room.roomId);
 				info.name = room.roomName;
 				info.type = room.roomType;
@@ -380,13 +350,6 @@ package com.ourgame.mahjong.lobby.controller
 		
 		private function ON_ROOM_ENTER(data:MJDataPack):void
 		{
-			//TODO
-			this.data.room = this.data.getRoomByID(5);
-			this.data.room.type = RoomType.AUTO;
-			this.notify(RoomMethod.ENTER_ROOM_SUCCESS);
-			
-			return;
-			
 			var body:SAckEnterRoom = new SAckEnterRoom();
 			body.mergeFrom(data.body);
 			
@@ -399,6 +362,8 @@ package com.ourgame.mahjong.lobby.controller
 			}
 			else
 			{
+				Log.error("进入房间失败原因", body.failReason);
+				
 				this.notify(RoomMethod.ENTER_ROOM_ERROR, body.result);
 			}
 		}

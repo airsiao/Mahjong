@@ -1,8 +1,8 @@
 package com.ourgame.mahjong.main.controller
 {
 	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
+	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
 	import com.ourgame.mahjong.lobby.method.LobbyMethod;
 	import com.ourgame.mahjong.lobby.state.LobbyState;
@@ -11,7 +11,9 @@ package com.ourgame.mahjong.main.controller
 	import com.ourgame.mahjong.main.model.MainSocketModel;
 	import com.ourgame.mahjong.main.model.UserModel;
 	import com.ourgame.mahjong.room.method.RoomMethod;
-	import com.ourgame.mahjong.room.state.RoomState;
+	import com.ourgame.mahjong.room.state.RoomAutoState;
+	import com.ourgame.mahjong.room.state.RoomManualState;
+	import com.ourgame.mahjong.table.state.TableState;
 	import com.wecoit.mvc.Controller;
 	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
@@ -54,6 +56,9 @@ package com.ourgame.mahjong.main.controller
 			this.register(SocketMethod.CONNECT_ERROR(MainSocketModel), CONNECT_ERROR);
 			this.register(SocketMethod.CONNECT_SUCCESS(MainSocketModel), CONNECT_SUCCESS);
 			
+			this.register(MainMethod.LOAD_GAME_ERROR, LOAD_GAME_ERROR);
+			this.register(MainMethod.LOAD_GAME_COMPLETE, LOAD_GAME_COMPLETE);
+			
 			this.register(RoomMethod.ENTER_ROOM_ERROR, ENTER_ROOM_ERROR);
 			this.register(RoomMethod.ENTER_ROOM_SUCCESS, ENTER_ROOM_SUCCESS);
 			this.register(RoomMethod.LEAVE_ROOM_ERROR, LEAVE_ROOM_ERROR);
@@ -93,6 +98,31 @@ package com.ourgame.mahjong.main.controller
 			this.notify(LobbyMethod.LOGIN);
 		}
 		
+		private function LOAD_GAME_ERROR(notice:INotice):void
+		{
+			if (((this.context as State).manager as Main).info.data.room.type == RoomType.AUTO)
+			{
+				((this.context as State).manager as Main).info.data.room = null;
+			}
+		}
+		
+		private function LOAD_GAME_COMPLETE(notice:INotice):void
+		{
+			var game:GameInfo = notice.params;
+			
+			if (game.main.hasOwnProperty("info"))
+			{
+				game.main["info"] = game;
+			}
+			
+			var room:RoomInfo = ((this.context as State).manager as Main).info.data.room;
+			
+			if (room.type == RoomType.AUTO)
+			{
+				(this.context as State).manager.switchState(RoomAutoState);
+			}
+		}
+		
 		private function ENTER_ROOM_ERROR(notice:INotice):void
 		{
 			// TODO Auto Generated method stub
@@ -109,9 +139,7 @@ package com.ourgame.mahjong.main.controller
 			}
 			else
 			{
-				this.notify(RoomMethod.TABLE_LIST);
-				
-				(this.context as State).manager.switchState(RoomState);
+				(this.context as State).manager.switchState(RoomManualState);
 			}
 		}
 		
@@ -135,9 +163,14 @@ package com.ourgame.mahjong.main.controller
 		
 		private function ENTER_TABLE_SUCCESS(notice:INotice):void
 		{
-			if (room.type == RoomType.MANUAL)
+			var room:RoomInfo = ((this.context as State).manager as Main).info.data.room;
+			
+			if (room.type == RoomType.AUTO)
 			{
-				var room:RoomInfo = (this.context.getModel(DataExchange) as DataExchange).room;
+				(this.context as State).manager.switchState(TableState);
+			}
+			else
+			{
 				this.notify(MainMethod.LOAD_GAME, room.gameType);
 			}
 		}

@@ -14,6 +14,12 @@ package com.ourgame.mahjong.table.method
 		private static const BASE:String = getQualifiedClassName(TableMethod) + "::";
 		
 		/**
+		 * 邀请进入游戏
+		 * params uint 游戏ID
+		 */
+		public static const GAME_INVITE:String = BASE + "GAME_INVITE";
+		
+		/**
 		 * 坐下
 		 * params uint 座位号
 		 */
