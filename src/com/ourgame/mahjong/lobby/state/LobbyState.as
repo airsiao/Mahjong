@@ -38,10 +38,6 @@ package com.ourgame.mahjong.lobby.state
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
 		
-		override public function onInit():void
-		{
-		}
-		
 		override public function onEnter():void
 		{
 			Log.debug("进入大厅");

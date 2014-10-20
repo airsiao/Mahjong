@@ -104,16 +104,7 @@ package com.ourgame.mahjong.main.model
 			}
 			else
 			{
-				this.data.ourgameID = Application.stage.loaderInfo.parameters["OurGameID"];
-				this.data.username = Application.stage.loaderInfo.parameters["userName"];
-				this.data.rolename = Application.stage.loaderInfo.parameters["Rolename"];
-				this.data.nickname = Application.stage.loaderInfo.parameters["DisplayName"];
-				this.data.ticket = Application.stage.loaderInfo.parameters["IDCertificate"];
-				this.data.channelID = Application.stage.loaderInfo.parameters["channelID"];
-				
-				this.updateHead();
-				
-				this.notify(MainMethod.LOAD_USERINFO_COMPLETE);
+				this.loadInfoFromFlashVars();
 			}
 		}
 		
@@ -131,13 +122,36 @@ package com.ourgame.mahjong.main.model
 		
 		// -------------------------------------------------------------------------------------------------------- 函数
 		
+		private function loadInfoFromFlashVars():void
+		{
+			this.data.ourgameID = Application.stage.loaderInfo.parameters["OurgameID"];
+			this.data.username = Application.stage.loaderInfo.parameters["UserName"];
+			this.data.rolename = Application.stage.loaderInfo.parameters["RoleName"];
+			this.data.nickname = Application.stage.loaderInfo.parameters["NickName"];
+			this.data.ticket = Application.stage.loaderInfo.parameters["Ticket"];
+			this.data.channelID = Application.stage.loaderInfo.parameters["ChannelID"];
+			
+			if (this.data.ourgameID == null)
+			{
+				this.notify(MainMethod.LOAD_USERINFO_ERROR);
+			}
+			else
+			{
+				this.updateHead();
+				
+				this.notify(MainMethod.LOAD_USERINFO_COMPLETE);
+			}
+		}
+		
 		private function onLoadError(event:BytesEvent):void
 		{
-			this.notify(MainMethod.LOAD_USERINFO_ERROR);
+			this.loadInfoFromFlashVars();
 		}
 		
 		private function onLoadComplete(event:BytesEvent):void
 		{
+			CoreData.isDebug = true;
+			
 			var config:Config = new Config(this.loader.content);
 			
 			this.data.ourgameID = config.getValue("ourgameID");

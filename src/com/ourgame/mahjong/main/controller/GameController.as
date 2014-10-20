@@ -4,7 +4,6 @@ package com.ourgame.mahjong.main.controller
 	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.ourgame.mahjong.main.method.MainMethod;
 	import com.ourgame.mahjong.main.model.GameLoadModel;
-	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.core.AssetsManager;
 	import com.wecoit.data.XmlValue;
 	import com.wecoit.mvc.Controller;
@@ -48,8 +47,6 @@ package com.ourgame.mahjong.main.controller
 			this.register(MainMethod.LOAD_GAME, LOAD_GAME);
 			this.register(MainMethod.LOAD_GAME_ERROR, LOAD_GAME_ERROR);
 			this.register(MainMethod.LOAD_GAME_COMPLETE, LOAD_GAME_COMPLETE);
-			
-			this.register(RoomMethod.ENTER_TABLE_SUCCESS, ENTER_TABLE_SUCCESS);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 函数
@@ -86,11 +83,6 @@ package com.ourgame.mahjong.main.controller
 		private function LOAD_GAME_COMPLETE(notice:INotice):void
 		{
 			this.current = notice.params;
-		}
-		
-		private function ENTER_TABLE_SUCCESS(notice:INotice):void
-		{
-			((this.context as State).manager as Main).addChild(this.current.main);
 		}
 	
 	}

@@ -11,6 +11,7 @@ package com.ourgame.mahjong
 	import flash.display.StageAlign;
 	import flash.display.StageScaleMode;
 	import flash.events.ProgressEvent;
+	import flash.ui.Keyboard;
 	
 	[SWF(width="960", height="600", backgroundColor="#000000", frameRate="25")]
 	
@@ -51,6 +52,8 @@ package com.ourgame.mahjong
 			this.data = new DataExchange();
 			
 			this.startup(new XmlValue(<game name="Main">data/assets.xml</game>));
+			
+			Log.instance.listen(this.stage, Keyboard.END, true, true);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法

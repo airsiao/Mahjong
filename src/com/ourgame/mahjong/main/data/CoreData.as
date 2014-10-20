@@ -17,6 +17,11 @@ package com.ourgame.mahjong.main.data
 		 * 调试文件路径
 		 */
 		public static const DEBUG:String = "data/debug.xml";
+		
+		/**
+		 * 是否为调试版本
+		 */
+		public static var isDebug:Boolean;
 	
 	}
 }

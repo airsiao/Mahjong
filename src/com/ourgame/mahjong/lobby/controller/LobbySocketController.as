@@ -2,8 +2,10 @@ package com.ourgame.mahjong.lobby.controller
 {
 	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.DataExchange;
+	import com.ourgame.mahjong.libaray.enum.RoomType;
 	import com.ourgame.mahjong.libaray.vo.ChatInfo;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
+	import com.ourgame.mahjong.libaray.vo.TableInfo;
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
 	import com.ourgame.mahjong.lobby.method.LobbyMethod;
 	import com.ourgame.mahjong.main.method.SocketMethod;
@@ -358,6 +360,14 @@ package com.ourgame.mahjong.lobby.controller
 			if (body.result == 0)
 			{
 				this.data.room = this.data.getRoomByID(body.roomId);
+				
+				if (this.data.room.type == RoomType.AUTO)
+				{
+					this.data.user.seat = 0;
+					this.data.table = new TableInfo();
+					this.data.table.userList.add(this.data.user);
+				}
+				
 				this.notify(RoomMethod.ENTER_ROOM_SUCCESS);
 			}
 			else

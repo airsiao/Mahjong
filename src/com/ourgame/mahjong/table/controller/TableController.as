@@ -1,6 +1,7 @@
 package com.ourgame.mahjong.table.controller
 {
 	import com.ourgame.mahjong.Main;
+	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.ourgame.mahjong.table.method.TableMethod;
 	import com.wecoit.mvc.Controller;
 	import com.wecoit.mvc.State;
@@ -39,6 +40,8 @@ package com.ourgame.mahjong.table.controller
 		override public function onAdd():void
 		{
 			this.register(TableMethod.GAME_INVITE, GAME_INVITE);
+			
+			this.notify(RoomMethod.STAND_BY);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 函数

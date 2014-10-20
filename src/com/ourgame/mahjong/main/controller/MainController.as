@@ -10,8 +10,8 @@ package com.ourgame.mahjong.main.controller
 	import com.ourgame.mahjong.main.method.SocketMethod;
 	import com.ourgame.mahjong.main.model.MainSocketModel;
 	import com.ourgame.mahjong.main.model.UserModel;
+	import com.ourgame.mahjong.main.state.MainState;
 	import com.ourgame.mahjong.room.method.RoomMethod;
-	import com.ourgame.mahjong.room.state.RoomAutoState;
 	import com.ourgame.mahjong.room.state.RoomManualState;
 	import com.ourgame.mahjong.table.state.TableState;
 	import com.wecoit.mvc.Controller;
@@ -115,12 +115,9 @@ package com.ourgame.mahjong.main.controller
 				game.main["info"] = game;
 			}
 			
-			var room:RoomInfo = ((this.context as State).manager as Main).info.data.room;
+			(this.context as MainState).view.play(game);
 			
-			if (room.type == RoomType.AUTO)
-			{
-				(this.context as State).manager.switchState(RoomAutoState);
-			}
+			(this.context as State).manager.switchState(TableState);
 		}
 		
 		private function ENTER_ROOM_ERROR(notice:INotice):void
@@ -165,11 +162,7 @@ package com.ourgame.mahjong.main.controller
 		{
 			var room:RoomInfo = ((this.context as State).manager as Main).info.data.room;
 			
-			if (room.type == RoomType.AUTO)
-			{
-				(this.context as State).manager.switchState(TableState);
-			}
-			else
+			if (room.type == RoomType.MANUAL)
 			{
 				this.notify(MainMethod.LOAD_GAME, room.gameType);
 			}

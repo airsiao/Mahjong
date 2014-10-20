@@ -93,7 +93,7 @@ package com.ourgame.mahjong.table.controller
 			var body:NtfInviteGame = new NtfInviteGame();
 			body.mergeFrom(data.body);
 			
-			Log.debug("收到游戏邀请", body);
+			Log.debug("收到游戏邀请消息", body);
 			
 			this.data.gameID = body.gameId;
 			

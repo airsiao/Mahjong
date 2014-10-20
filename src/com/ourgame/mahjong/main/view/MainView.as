@@ -1,7 +1,10 @@
 package com.ourgame.mahjong.main.view
 {
+	import com.ourgame.mahjong.Main;
+	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.ourgame.mahjong.main.data.CoreData;
 	import com.wecoit.debug.Log;
+	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.View;
 	
 	import flash.events.ContextMenuEvent;
@@ -61,6 +64,11 @@ package com.ourgame.mahjong.main.view
 			this.version = null;
 			
 			this.module.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		}
+		
+		public function play(game:GameInfo):void
+		{
+			((this.context as State).manager as Main).addChild(game.main);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 函数

@@ -3,7 +3,7 @@ package com.ourgame.mahjong.room.controller
 	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.DataExchange;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
-	import com.ourgame.mahjong.libaray.vo.TableInfo;
+	import com.ourgame.mahjong.libaray.vo.UserInfo;
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
 	import com.ourgame.mahjong.main.method.SocketMethod;
 	import com.ourgame.mahjong.main.model.MainSocketModel;
@@ -14,6 +14,7 @@ package com.ourgame.mahjong.room.controller
 	import com.ourgame.mahjong.message.NtfInviteTable;
 	import com.ourgame.mahjong.message.SAckEnterTable;
 	import com.ourgame.mahjong.message.SAckStandBy;
+	import com.ourgame.mahjong.message.TablePlayer;
 	import com.ourgame.mahjong.protocol.MJRoomProtocol;
 	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.debug.Log;
@@ -202,11 +203,32 @@ package com.ourgame.mahjong.room.controller
 			{
 				if (this.data.room.type == RoomType.AUTO)
 				{
-					this.data.table = new TableInfo(body.tableId);
+					this.data.table.id = body.tableId;
 				}
 				else
 				{
 					this.data.table = this.data.room.getTableByID(body.tableId);
+				}
+				
+				for each (var info:TablePlayer in body.player)
+				{
+					var user:UserInfo = (info.userId.low == this.data.user.id) ? this.data.user : new UserInfo(info.userId.low);
+					
+					if (info.userId.low == this.data.user.id)
+					{
+						this.data.table.currentSeat = info.seat;
+					}
+					
+					user.seat = info.seat;
+					user.nickname = info.nickname;
+					user.chips = info.score;
+					user.sex = info.gender;
+					user.headImage = info.headImage;
+					user.level = info.level;
+					user.experience = info.experience;
+					user.winRate = info.winRate;
+					
+					this.data.table.userList.add(user);
 				}
 				
 				this.notify(RoomMethod.ENTER_TABLE_SUCCESS);
@@ -272,7 +294,7 @@ package com.ourgame.mahjong.room.controller
 			var body:NtfInviteTable = new NtfInviteTable();
 			body.mergeFrom(data.body);
 			
-			Log.debug("收到桌子邀请", body);
+			Log.debug("收到桌子邀请消息", body);
 			
 			this.notify(RoomMethod.ENTER_TABLE, body.tableId);
 		}

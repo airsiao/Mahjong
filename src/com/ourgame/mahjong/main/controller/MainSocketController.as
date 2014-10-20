@@ -1,10 +1,10 @@
 package com.ourgame.mahjong.main.controller
 {
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
+	import com.ourgame.mahjong.main.data.CoreData;
 	import com.ourgame.mahjong.main.method.SocketMethod;
 	import com.ourgame.mahjong.main.model.MainSocketModel;
 	import com.wecoit.core.AssetsManager;
-	import com.wecoit.core.FlashPlayer;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.Controller;
 	import com.wecoit.mvc.core.INotice;
@@ -76,7 +76,7 @@ package com.ourgame.mahjong.main.controller
 		
 		private function CONNECT(notice:INotice):void
 		{
-			var config:String = (FlashPlayer.isDebug) ? "debug" : "services";
+			var config:String = (CoreData.isDebug) ? "debug" : "services";
 			var host:String = AssetsManager.instance.getConfig(config).getString("ServerHost");
 			var port:uint = AssetsManager.instance.getConfig(config).getNumber("ServerPort");
 			
