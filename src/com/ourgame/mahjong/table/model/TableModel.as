@@ -46,6 +46,11 @@ package com.ourgame.mahjong.table.model
 			((this.context as State).manager as Main).info.data.tableProxy = null;
 		}
 		
+		public function ready():void
+		{
+			this.notify(RoomMethod.STAND_BY);
+		}
+		
 		public function leave():void
 		{
 			this.notify(RoomMethod.LEAVE_TABLE);
