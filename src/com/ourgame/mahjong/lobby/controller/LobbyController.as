@@ -1,11 +1,9 @@
 package com.ourgame.mahjong.lobby.controller
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.vo.RoomInfo;
 	import com.ourgame.mahjong.lobby.method.LobbyMethod;
+	import com.ourgame.mahjong.lobby.state.LobbyState;
 	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.mvc.Controller;
-	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	
 	/**
@@ -84,8 +82,10 @@ package com.ourgame.mahjong.lobby.controller
 		
 		private function ROOM_LIST_SUCCESS(notice:INotice):void
 		{
-			var target:RoomInfo = ((this.context as State).manager as Main).info.data.roomList.element(0);
-			this.notify(RoomMethod.ENTER_ROOM, target.id);
+			//			var target:RoomInfo = ((this.context as State).manager as Main).info.data.roomList.element(0);
+			//			this.notify(RoomMethod.ENTER_ROOM, target.id);
+			
+			(this.context as LobbyState).roomlist.show();
 		}
 	
 	}

@@ -1,18 +1,17 @@
-package com.ourgame.mahjong.table.model
+package com.ourgame.mahjong.lobby.view
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
-	import com.ourgame.mahjong.libaray.ITableProxy;
-	import com.ourgame.mahjong.libaray.enum.RoomType;
-	import com.ourgame.mahjong.room.method.RoomMethod;
-	import com.wecoit.mvc.Model;
-	import com.wecoit.mvc.State;
+	import com.ourgame.mahjong.lobby.enum.UIDefinition;
+	import com.ourgame.mahjong.main.ui.LayerManager;
+	import com.wecoit.core.AssetsManager;
+	import com.wecoit.mvc.View;
+	
+	import flash.display.MovieClip;
 	
 	/**
-	 * 桌子数据模型
+	 * 排行榜视图
 	 * @author SiaoLeon
 	 */
-	public class TableModel extends Model implements ITableProxy
+	public class RankView extends View
 	{
 		// -------------------------------------------------------------------------------------------------------- 静态常量
 		
@@ -26,14 +25,14 @@ package com.ourgame.mahjong.table.model
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
-		private var data:DataExchange;
+		private var background:MovieClip;
 		
 		// -------------------------------------------------------------------------------------------------------- 构造
 		
 		/**
 		 * 构造函数
 		 */
-		public function TableModel()
+		public function RankView()
 		{
 			super();
 		}
@@ -42,31 +41,17 @@ package com.ourgame.mahjong.table.model
 		
 		override public function onAdd():void
 		{
-			this.data = ((this.context as State).manager as Main).info.data;
-			this.data.tableProxy = this;
+			this.background = AssetsManager.instance.getDefinitionMovieClip(UIDefinition.RankBackground);
+			this.background.gotoAndStop(1);
+			this.background.x = 700;
+			this.background.y = 116;
+			LayerManager.instance.foreground.addChild(this.background);
 		}
 		
 		override public function onRemove():void
 		{
-			this.data.tableProxy = null;
-			this.data = null;
-		}
-		
-		public function ready():void
-		{
-			this.notify(RoomMethod.STAND_BY);
-		}
-		
-		public function leave():void
-		{
-			if (((this.context as State).manager as Main).info.data.room.type == RoomType.AUTO)
-			{
-				this.notify(RoomMethod.LEAVE_ROOM);
-			}
-			else
-			{
-				this.notify(RoomMethod.LEAVE_TABLE);
-			}
+			LayerManager.instance.foreground.removeChild(this.background);
+			this.background = null;
 		}
 	
 		// -------------------------------------------------------------------------------------------------------- 函数

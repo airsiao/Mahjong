@@ -7,6 +7,9 @@
 	<!-- 游戏列表 -->
 	<asset name="Games">data/games.xml</asset>
 	
+	<!-- 游戏列表 -->
+	<asset name="UI">assets/ui.swf</asset>
+	
 	<!-- 主程序 -->
 	<asset name="Main" ver="0.0.0.1" description="主程序">Main.swf</asset>
 	

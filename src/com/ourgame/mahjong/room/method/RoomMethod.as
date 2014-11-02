@@ -57,6 +57,7 @@ package com.ourgame.mahjong.room.method
 		
 		/**
 		 * 离开房间成功
+		 * params RoomInfo 离开的房间对象
 		 */
 		public static const LEAVE_ROOM_SUCCESS:String = BASE + "LEAVE_ROOM_SUCCESS";
 		

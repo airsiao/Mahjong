@@ -3,6 +3,7 @@ package com.ourgame.mahjong.room.controller
 	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.DataExchange;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
+	import com.ourgame.mahjong.libaray.vo.RoomInfo;
 	import com.ourgame.mahjong.libaray.vo.UserInfo;
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
 	import com.ourgame.mahjong.main.method.SocketMethod;
@@ -13,6 +14,7 @@ package com.ourgame.mahjong.room.controller
 	import com.ourgame.mahjong.message.CReqTables;
 	import com.ourgame.mahjong.message.NtfInviteTable;
 	import com.ourgame.mahjong.message.SAckEnterTable;
+	import com.ourgame.mahjong.message.SAckLeaveRoom;
 	import com.ourgame.mahjong.message.SAckStandBy;
 	import com.ourgame.mahjong.message.TablePlayer;
 	import com.ourgame.mahjong.protocol.MJRoomProtocol;
@@ -182,8 +184,15 @@ package com.ourgame.mahjong.room.controller
 		
 		private function ON_ROOM_LEAVE(data:MJDataPack):void
 		{
-			// TODO Auto Generated method stub
-		
+			var body:SAckLeaveRoom = new SAckLeaveRoom();
+			body.mergeFrom(data.body);
+			
+			var room:RoomInfo = this.data.room;
+			this.data.room = null;
+			
+			Log.debug("请求离开房间结果", body);
+			
+			this.notify(RoomMethod.LEAVE_ROOM_SUCCESS, room);
 		}
 		
 		private function ON_TABLE_LIST(data:MJDataPack):void

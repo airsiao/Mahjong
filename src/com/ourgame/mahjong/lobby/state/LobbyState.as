@@ -2,6 +2,9 @@ package com.ourgame.mahjong.lobby.state
 {
 	import com.ourgame.mahjong.lobby.controller.LobbyController;
 	import com.ourgame.mahjong.lobby.controller.LobbySocketController;
+	import com.ourgame.mahjong.lobby.view.LobbyView;
+	import com.ourgame.mahjong.lobby.view.RankView;
+	import com.ourgame.mahjong.lobby.view.RoomListView;
 	import com.ourgame.mahjong.room.state.RoomState;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.State;
@@ -22,6 +25,12 @@ package com.ourgame.mahjong.lobby.state
 		
 		// -------------------------------------------------------------------------------------------------------- 属性
 		
+		public var view:LobbyView;
+		
+		public var roomlist:RoomListView;
+		
+		public var rank:RankView;
+		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
 		// -------------------------------------------------------------------------------------------------------- 构造
@@ -32,15 +41,24 @@ package com.ourgame.mahjong.lobby.state
 		public function LobbyState(key:Object=null)
 		{
 			super(key);
-			
-			this.add(new RoomState());
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
 		
+		override public function onInit():void
+		{
+			this.view = new LobbyView();
+			this.roomlist = new RoomListView();
+			this.rank = new RankView();
+		}
+		
 		override public function onEnter():void
 		{
 			Log.debug("进入大厅");
+			
+			this.addView(this.view);
+			this.addView(this.roomlist);
+			this.addView(this.rank);
 			
 			this.addController(new LobbySocketController());
 			this.addController(new LobbyController());

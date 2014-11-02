@@ -148,8 +148,19 @@ package com.ourgame.mahjong.main.controller
 		
 		private function LEAVE_ROOM_SUCCESS(notice:INotice):void
 		{
-			// TODO Auto Generated method stub
-		
+			var room:RoomInfo = notice.params;
+			
+			(this.context as State).manager.switchState(LobbyState);
+			
+			if (room.type == RoomType.AUTO)
+			{
+				(this.context as MainState).view.stop();
+				
+				this.notify(RoomMethod.ROOM_LIST);
+			}
+			else
+			{
+			}
 		}
 		
 		private function ENTER_TABLE_ERROR(notice:INotice):void

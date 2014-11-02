@@ -8,6 +8,7 @@ package com.ourgame.mahjong.main.state
 	import com.ourgame.mahjong.main.model.MainSocketModel;
 	import com.ourgame.mahjong.main.model.UserModel;
 	import com.ourgame.mahjong.main.view.MainView;
+	import com.ourgame.mahjong.room.state.RoomState;
 	import com.wecoit.mvc.State;
 	
 	/**
@@ -40,6 +41,8 @@ package com.ourgame.mahjong.main.state
 			super(key);
 			
 			this.add(new LobbyState());
+			
+			this.add(new RoomState());
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
