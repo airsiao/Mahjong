@@ -1,7 +1,6 @@
 package com.ourgame.mahjong.table.controller
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.vo.socket.MJDataPack;
 	import com.ourgame.mahjong.main.method.SocketMethod;
 	import com.ourgame.mahjong.main.model.MainSocketModel;
@@ -12,7 +11,6 @@ package com.ourgame.mahjong.table.controller
 	import com.ourgame.mahjong.table.method.TableMethod;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.Controller;
-	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	
 	/**
@@ -33,8 +31,6 @@ package com.ourgame.mahjong.table.controller
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
-		private var data:DataExchange;
-		
 		private var socket:MainSocketModel;
 		
 		// -------------------------------------------------------------------------------------------------------- 构造
@@ -53,7 +49,6 @@ package com.ourgame.mahjong.table.controller
 		{
 			this.register(SocketMethod.RECIVED(MainSocketModel), RECIVED);
 			
-			this.data = ((this.context as State).manager as Main).info.data;
 			this.socket = this.context.getModel(MainSocketModel) as MainSocketModel;
 		}
 		
@@ -67,7 +62,7 @@ package com.ourgame.mahjong.table.controller
 		private function LEAVE_ROOM(notice:INotice):void
 		{
 			var body:CReqLeaveRoom = new CReqLeaveRoom();
-			body.roomId = this.data.room.id;
+			body.roomId = CommonData.room.id;
 			
 			Log.debug("发送离开房间请求", body);
 			
@@ -95,7 +90,7 @@ package com.ourgame.mahjong.table.controller
 			
 			Log.debug("收到游戏邀请消息", body);
 			
-			this.data.gameID = body.gameId;
+			CommonData.gameID = body.gameId;
 			
 			this.notify(TableMethod.GAME_INVITE, body.tableId);
 		}

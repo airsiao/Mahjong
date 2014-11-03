@@ -1,6 +1,5 @@
 package com.ourgame.mahjong.main.controller
 {
-	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.ourgame.mahjong.main.method.MainMethod;
 	import com.ourgame.mahjong.main.model.GameLoadModel;
@@ -8,7 +7,6 @@ package com.ourgame.mahjong.main.controller
 	import com.wecoit.core.AssetsManager;
 	import com.wecoit.data.XmlValue;
 	import com.wecoit.mvc.Controller;
-	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	
 	/**
@@ -69,7 +67,7 @@ package com.ourgame.mahjong.main.controller
 				
 				if (gameList.length > 0)
 				{
-					(this.context.getModel(GameLoadModel) as GameLoadModel).load(new GameInfo(gameList[0], ((this.context as State).manager as Main).info.data));
+					(this.context.getModel(GameLoadModel) as GameLoadModel).load(new GameInfo(gameList[0]));
 				}
 				else
 				{
@@ -84,8 +82,7 @@ package com.ourgame.mahjong.main.controller
 		
 		private function LOAD_GAME_ERROR(notice:INotice):void
 		{
-			// TODO Auto Generated method stub
-		
+			this.current = null;
 		}
 		
 		private function LOAD_GAME_COMPLETE(notice:INotice):void

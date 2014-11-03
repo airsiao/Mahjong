@@ -7,7 +7,7 @@ package com.ourgame.mahjong
 	import com.wecoit.mvc.Application;
 	import com.wecoit.mvc.core.IState;
 	
-	[SWF(width="960", height="600", backgroundColor="#000000", frameRate="25")]
+	[SWF(width="960", height="600", backgroundColor="#000000", frameRate="24")]
 	
 	/**
 	 * 麻将主程序

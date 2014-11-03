@@ -5,7 +5,6 @@ package com.ourgame.mahjong.lobby.state
 	import com.ourgame.mahjong.lobby.view.LobbyView;
 	import com.ourgame.mahjong.lobby.view.RankView;
 	import com.ourgame.mahjong.lobby.view.RoomListView;
-	import com.ourgame.mahjong.room.state.RoomState;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.State;
 	

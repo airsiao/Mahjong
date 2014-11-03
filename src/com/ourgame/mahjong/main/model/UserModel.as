@@ -1,7 +1,7 @@
 package com.ourgame.mahjong.main.model
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
+	import com.ourgame.mahjong.libaray.data.CommonData;
+	import com.ourgame.mahjong.libaray.vo.UserInfo;
 	import com.ourgame.mahjong.main.data.CoreData;
 	import com.ourgame.mahjong.main.method.MainMethod;
 	import com.wecoit.core.AssetsManager;
@@ -12,7 +12,6 @@ package com.ourgame.mahjong.main.model
 	import com.wecoit.loader.BytesLoader;
 	import com.wecoit.mvc.Application;
 	import com.wecoit.mvc.Model;
-	import com.wecoit.mvc.State;
 	import com.wecoit.net.services.HttpService;
 	import com.wecoit.utils.string.stampUrl;
 	
@@ -37,8 +36,6 @@ package com.ourgame.mahjong.main.model
 		// -------------------------------------------------------------------------------------------------------- 属性
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
-		
-		private var data:DataExchange;
 		
 		private var loader:BytesLoader;
 		
@@ -67,8 +64,6 @@ package com.ourgame.mahjong.main.model
 				{
 				}
 			}
-			
-			this.data = ((this.context as State).manager as Main).info.data;
 			
 			this.loader = new BytesLoader();
 			this.loader.addEventListener(BytesEvent.ERROR, onLoadError);
@@ -113,7 +108,7 @@ package com.ourgame.mahjong.main.model
 		 */
 		public function updateHead():void
 		{
-			var api:String = stampUrl(AssetsManager.instance.getConfig("services").getString("HeadImageApi") + "?username=" + this.data.ourgameID);
+			var api:String = stampUrl(AssetsManager.instance.getConfig("services").getString("HeadImageApi") + "?username=" + CommonData.ourgameID);
 			
 			Log.debug("请求获取用户头像地址", api);
 			
@@ -124,14 +119,15 @@ package com.ourgame.mahjong.main.model
 		
 		private function loadInfoFromFlashVars():void
 		{
-			this.data.ourgameID = Application.stage.loaderInfo.parameters["OurgameID"];
-			this.data.username = Application.stage.loaderInfo.parameters["UserName"];
-			this.data.rolename = Application.stage.loaderInfo.parameters["RoleName"];
-			this.data.nickname = Application.stage.loaderInfo.parameters["NickName"];
-			this.data.ticket = Application.stage.loaderInfo.parameters["Ticket"];
-			this.data.channelID = Application.stage.loaderInfo.parameters["ChannelID"];
+			CommonData.user = new UserInfo();
+			CommonData.ourgameID = Application.stage.loaderInfo.parameters["OurgameID"];
+			CommonData.username = Application.stage.loaderInfo.parameters["UserName"];
+			CommonData.rolename = Application.stage.loaderInfo.parameters["RoleName"];
+			CommonData.nickname = Application.stage.loaderInfo.parameters["NickName"];
+			CommonData.ticket = Application.stage.loaderInfo.parameters["Ticket"];
+			CommonData.channelID = Application.stage.loaderInfo.parameters["ChannelID"];
 			
-			if (this.data.ourgameID == null)
+			if (CommonData.ourgameID == null)
 			{
 				this.notify(MainMethod.LOAD_USERINFO_ERROR);
 			}
@@ -154,12 +150,13 @@ package com.ourgame.mahjong.main.model
 			
 			var config:Config = new Config(this.loader.content);
 			
-			this.data.ourgameID = config.getValue("ourgameID");
-			this.data.username = config.getValue("username");
-			this.data.rolename = config.getValue("rolename");
-			this.data.nickname = config.getValue("nickname");
-			this.data.ticket = config.getValue("ticket");
-			this.data.channelID = config.getValue("channelID");
+			CommonData.user = new UserInfo();
+			CommonData.ourgameID = config.getValue("ourgameID");
+			CommonData.username = config.getValue("username");
+			CommonData.rolename = config.getValue("rolename");
+			CommonData.nickname = config.getValue("nickname");
+			CommonData.ticket = config.getValue("ticket");
+			CommonData.channelID = config.getValue("channelID");
 			
 			AssetsManager.instance.saveAsset(config.name, this.loader.content);
 			
@@ -208,7 +205,7 @@ package com.ourgame.mahjong.main.model
 				
 				Log.debug("用户头像地址获取成功", head["Url"]);
 				
-				this.data.user.headImage = head["Url"];
+				CommonData.user.headImage = head["Url"];
 			}
 		}
 		
@@ -216,7 +213,7 @@ package com.ourgame.mahjong.main.model
 		{
 			Log.error("用户头像地址获取失败");
 			
-			this.data.user.headImage = AssetsManager.instance.getConfig("services").getString("HeadImageDefault");
+			CommonData.user.headImage = AssetsManager.instance.getConfig("services").getString("HeadImageDefault");
 		}
 	
 	}

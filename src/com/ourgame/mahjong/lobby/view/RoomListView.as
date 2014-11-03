@@ -1,6 +1,6 @@
 package com.ourgame.mahjong.lobby.view
 {
-	import com.ourgame.mahjong.Main;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
 	import com.ourgame.mahjong.lobby.enum.UIDefinition;
 	import com.ourgame.mahjong.lobby.ui.RoomItem;
@@ -69,9 +69,9 @@ package com.ourgame.mahjong.lobby.view
 		
 		public function show():void
 		{
-			for (var i:int = 0; i < (this.module as Main).info.data.roomList.length; i++)
+			for (var i:int = 0; i < CommonData.roomList.length; i++)
 			{
-				var info:RoomInfo = (this.module as Main).info.data.roomList.element(i);
+				var info:RoomInfo = CommonData.roomList.element(i);
 				var item:RoomItem = new RoomItem();
 				item.x = 15 + i % 3 * 215;
 				item.y = 185 + Math.floor(i / 3) * 200;

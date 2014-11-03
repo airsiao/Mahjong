@@ -1,10 +1,9 @@
 package com.ourgame.mahjong.table.controller
 {
-	import com.ourgame.mahjong.Main;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.ourgame.mahjong.table.method.TableMethod;
 	import com.wecoit.mvc.Controller;
-	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	
 	/**
@@ -48,7 +47,7 @@ package com.ourgame.mahjong.table.controller
 		
 		private function GAME_INVITE(notice:INotice):void
 		{
-			((this.context as State).manager as Main).info.data.gameProxy.start();
+			CommonData.gameProxy.start();
 		}
 	
 	}

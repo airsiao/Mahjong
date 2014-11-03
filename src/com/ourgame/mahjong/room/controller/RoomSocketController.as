@@ -1,7 +1,6 @@
 package com.ourgame.mahjong.room.controller
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
 	import com.ourgame.mahjong.libaray.vo.UserInfo;
@@ -21,7 +20,6 @@ package com.ourgame.mahjong.room.controller
 	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.Controller;
-	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	
 	/**
@@ -41,8 +39,6 @@ package com.ourgame.mahjong.room.controller
 		// -------------------------------------------------------------------------------------------------------- 属性
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
-		
-		private var data:DataExchange;
 		
 		private var socket:MainSocketModel;
 		
@@ -69,7 +65,6 @@ package com.ourgame.mahjong.room.controller
 			this.register(RoomMethod.QUICK_START, QUICK_START);
 			this.register(RoomMethod.TABLE_INFO, TABLE_INFO);
 			
-			this.data = ((this.context as State).manager as Main).info.data;
 			this.socket = this.context.getModel(MainSocketModel) as MainSocketModel;
 		}
 		
@@ -83,7 +78,7 @@ package com.ourgame.mahjong.room.controller
 		private function LEAVE_ROOM(notice:INotice):void
 		{
 			var body:CReqLeaveRoom = new CReqLeaveRoom();
-			body.roomId = this.data.room.id;
+			body.roomId = CommonData.room.id;
 			
 			Log.debug("发送离开房间请求", body);
 			
@@ -93,7 +88,7 @@ package com.ourgame.mahjong.room.controller
 		private function TABLE_LIST(notice:INotice):void
 		{
 			var body:CReqTables = new CReqTables();
-			body.roomId = this.data.room.id;
+			body.roomId = CommonData.room.id;
 			
 			Log.debug("发送获取桌子列表请求", body);
 			
@@ -103,7 +98,7 @@ package com.ourgame.mahjong.room.controller
 		private function ENTER_TABLE(notice:INotice):void
 		{
 			var body:CReqEnterTable = new CReqEnterTable();
-			body.roomId = this.data.room.id;
+			body.roomId = CommonData.room.id;
 			body.tableId = notice.params;
 			
 			Log.debug("发送进入桌子请求", body);
@@ -187,8 +182,8 @@ package com.ourgame.mahjong.room.controller
 			var body:SAckLeaveRoom = new SAckLeaveRoom();
 			body.mergeFrom(data.body);
 			
-			var room:RoomInfo = this.data.room;
-			this.data.room = null;
+			var room:RoomInfo = CommonData.room;
+			CommonData.room = null;
 			
 			Log.debug("请求离开房间结果", body);
 			
@@ -210,22 +205,22 @@ package com.ourgame.mahjong.room.controller
 			
 			if (body.result == 0)
 			{
-				if (this.data.room.type == RoomType.AUTO)
+				if (CommonData.room.type == RoomType.AUTO)
 				{
-					this.data.table.id = body.tableId;
+					CommonData.table.id = body.tableId;
 				}
 				else
 				{
-					this.data.table = this.data.room.getTableByID(body.tableId);
+					CommonData.table = CommonData.room.getTableByID(body.tableId);
 				}
 				
 				for each (var info:TablePlayer in body.player)
 				{
-					var user:UserInfo = (info.userId.low == this.data.user.id) ? this.data.user : new UserInfo(info.userId.low);
+					var user:UserInfo = (info.userId.low == CommonData.user.id) ? CommonData.user : new UserInfo(info.userId.low);
 					
-					if (info.userId.low == this.data.user.id)
+					if (info.userId.low == CommonData.user.id)
 					{
-						this.data.table.currentSeat = info.seat;
+						CommonData.table.currentSeat = info.seat;
 					}
 					
 					user.seat = info.seat;
@@ -237,7 +232,7 @@ package com.ourgame.mahjong.room.controller
 					user.experience = info.experience;
 					user.winRate = info.winRate;
 					
-					this.data.table.userList.add(user);
+					CommonData.table.userList.add(user);
 				}
 				
 				this.notify(RoomMethod.ENTER_TABLE_SUCCESS);

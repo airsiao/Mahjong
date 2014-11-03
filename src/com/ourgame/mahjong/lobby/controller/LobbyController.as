@@ -82,9 +82,6 @@ package com.ourgame.mahjong.lobby.controller
 		
 		private function ROOM_LIST_SUCCESS(notice:INotice):void
 		{
-			//			var target:RoomInfo = ((this.context as State).manager as Main).info.data.roomList.element(0);
-			//			this.notify(RoomMethod.ENTER_ROOM, target.id);
-			
 			(this.context as LobbyState).roomlist.show();
 		}
 	

@@ -1,12 +1,10 @@
 package com.ourgame.mahjong.table.model
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
 	import com.ourgame.mahjong.libaray.ITableProxy;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
 	import com.ourgame.mahjong.room.method.RoomMethod;
 	import com.wecoit.mvc.Model;
-	import com.wecoit.mvc.State;
 	
 	/**
 	 * 桌子数据模型
@@ -26,8 +24,6 @@ package com.ourgame.mahjong.table.model
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
-		private var data:DataExchange;
-		
 		// -------------------------------------------------------------------------------------------------------- 构造
 		
 		/**
@@ -42,14 +38,12 @@ package com.ourgame.mahjong.table.model
 		
 		override public function onAdd():void
 		{
-			this.data = ((this.context as State).manager as Main).info.data;
-			this.data.tableProxy = this;
+			CommonData.tableProxy = this;
 		}
 		
 		override public function onRemove():void
 		{
-			this.data.tableProxy = null;
-			this.data = null;
+			CommonData.tableProxy = null;
 		}
 		
 		public function ready():void
@@ -59,7 +53,7 @@ package com.ourgame.mahjong.table.model
 		
 		public function leave():void
 		{
-			if (((this.context as State).manager as Main).info.data.room.type == RoomType.AUTO)
+			if (CommonData.room.type == RoomType.AUTO)
 			{
 				this.notify(RoomMethod.LEAVE_ROOM);
 			}

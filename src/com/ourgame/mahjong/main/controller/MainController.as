@@ -1,6 +1,6 @@
 package com.ourgame.mahjong.main.controller
 {
-	import com.ourgame.mahjong.Main;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
 	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
@@ -100,9 +100,9 @@ package com.ourgame.mahjong.main.controller
 		
 		private function LOAD_GAME_ERROR(notice:INotice):void
 		{
-			if (((this.context as State).manager as Main).info.data.room.type == RoomType.AUTO)
+			if (CommonData.room.type == RoomType.AUTO)
 			{
-				((this.context as State).manager as Main).info.data.room = null;
+				CommonData.room = null;
 			}
 		}
 		
@@ -128,7 +128,7 @@ package com.ourgame.mahjong.main.controller
 		
 		private function ENTER_ROOM_SUCCESS(notice:INotice):void
 		{
-			var room:RoomInfo = ((this.context as State).manager as Main).info.data.room;
+			var room:RoomInfo = CommonData.room;
 			
 			if (room.type == RoomType.AUTO)
 			{
@@ -171,11 +171,9 @@ package com.ourgame.mahjong.main.controller
 		
 		private function ENTER_TABLE_SUCCESS(notice:INotice):void
 		{
-			var room:RoomInfo = ((this.context as State).manager as Main).info.data.room;
-			
-			if (room.type == RoomType.MANUAL)
+			if (CommonData.room.type == RoomType.MANUAL)
 			{
-				this.notify(MainMethod.LOAD_GAME, room.gameType);
+				this.notify(MainMethod.LOAD_GAME, CommonData.room.gameType);
 			}
 		}
 		

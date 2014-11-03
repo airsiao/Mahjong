@@ -1,12 +1,11 @@
 package com.ourgame.mahjong.main.model
 {
 	import com.netease.protobuf.Message;
-	import com.ourgame.mahjong.Main;
 	import com.ourgame.mahjong.libaray.SocketProcessor;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.events.SocketEvent;
 	import com.ourgame.mahjong.main.method.SocketMethod;
 	import com.wecoit.mvc.Model;
-	import com.wecoit.mvc.State;
 	
 	/**
 	 * 主程序Socket数据模型
@@ -26,8 +25,6 @@ package com.ourgame.mahjong.main.model
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
-		private var socket:SocketProcessor;
-		
 		// -------------------------------------------------------------------------------------------------------- 构造
 		
 		/**
@@ -42,26 +39,24 @@ package com.ourgame.mahjong.main.model
 		
 		override public function onAdd():void
 		{
-			this.socket = ((this.context as State).manager as Main).info.data.socket;
-			
-			this.socket.addEventListener(SocketEvent.CONNECTED, onConnected);
-			this.socket.addEventListener(SocketEvent.ERROR, onError);
-			this.socket.addEventListener(SocketEvent.CLOSED, onClosed);
-			this.socket.addEventListener(SocketEvent.DISCONNECT, onDisconnect);
-			this.socket.addEventListener(SocketEvent.FLUSH, onFlush);
-			this.socket.addEventListener(SocketEvent.RECIVE, onRecive);
+			CommonData.socket = new SocketProcessor();
+			CommonData.socket.addEventListener(SocketEvent.CONNECTED, onConnected);
+			CommonData.socket.addEventListener(SocketEvent.ERROR, onError);
+			CommonData.socket.addEventListener(SocketEvent.CLOSED, onClosed);
+			CommonData.socket.addEventListener(SocketEvent.DISCONNECT, onDisconnect);
+			CommonData.socket.addEventListener(SocketEvent.FLUSH, onFlush);
+			CommonData.socket.addEventListener(SocketEvent.RECIVE, onRecive);
 		}
 		
 		override public function onRemove():void
 		{
-			this.socket.removeEventListener(SocketEvent.CONNECTED, onConnected);
-			this.socket.removeEventListener(SocketEvent.ERROR, onError);
-			this.socket.removeEventListener(SocketEvent.CLOSED, onClosed);
-			this.socket.removeEventListener(SocketEvent.DISCONNECT, onDisconnect);
-			this.socket.removeEventListener(SocketEvent.FLUSH, onFlush);
-			this.socket.removeEventListener(SocketEvent.RECIVE, onRecive);
-			
-			this.socket = null;
+			CommonData.socket.removeEventListener(SocketEvent.CONNECTED, onConnected);
+			CommonData.socket.removeEventListener(SocketEvent.ERROR, onError);
+			CommonData.socket.removeEventListener(SocketEvent.CLOSED, onClosed);
+			CommonData.socket.removeEventListener(SocketEvent.DISCONNECT, onDisconnect);
+			CommonData.socket.removeEventListener(SocketEvent.FLUSH, onFlush);
+			CommonData.socket.removeEventListener(SocketEvent.RECIVE, onRecive);
+			CommonData.socket = null;
 		}
 		
 		public function onConnected(event:SocketEvent):void
@@ -99,12 +94,12 @@ package com.ourgame.mahjong.main.model
 		 */
 		public function connect(host:String, port:uint):void
 		{
-			if (this.socket.client.connected)
+			if (CommonData.socket.client.connected)
 			{
-				this.socket.close();
+				CommonData.socket.close();
 			}
 			
-			this.socket.connect(host, port);
+			CommonData.socket.connect(host, port);
 		}
 		
 		/**
@@ -114,7 +109,7 @@ package com.ourgame.mahjong.main.model
 		 */
 		public function send(type:int, msg:Message=null):void
 		{
-			this.socket.send(type, msg);
+			CommonData.socket.send(type, msg);
 		}
 		
 		/**
@@ -124,7 +119,7 @@ package com.ourgame.mahjong.main.model
 		 */
 		public function push(type:int, msg:Message=null):void
 		{
-			this.socket.push(type, msg);
+			CommonData.socket.push(type, msg);
 		}
 		
 		/**
@@ -132,7 +127,7 @@ package com.ourgame.mahjong.main.model
 		 */
 		public function close():void
 		{
-			this.socket.close();
+			CommonData.socket.close();
 		}
 	
 		// -------------------------------------------------------------------------------------------------------- 函数

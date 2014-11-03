@@ -1,7 +1,6 @@
 package com.ourgame.mahjong.lobby.controller
 {
-	import com.ourgame.mahjong.Main;
-	import com.ourgame.mahjong.libaray.DataExchange;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.enum.RoomType;
 	import com.ourgame.mahjong.libaray.vo.ChatInfo;
 	import com.ourgame.mahjong.libaray.vo.RoomInfo;
@@ -27,10 +26,10 @@ package com.ourgame.mahjong.lobby.controller
 	import com.ourgame.mahjong.protocol.MJLobbyProtocol;
 	import com.ourgame.mahjong.protocol.MJRoomProtocol;
 	import com.ourgame.mahjong.room.method.RoomMethod;
+	import com.wecoit.data.ArrayList;
 	import com.wecoit.debug.Log;
 	import com.wecoit.mvc.Application;
 	import com.wecoit.mvc.Controller;
-	import com.wecoit.mvc.State;
 	import com.wecoit.mvc.core.INotice;
 	import com.wecoit.utils.bytes.Base64;
 	
@@ -53,8 +52,6 @@ package com.ourgame.mahjong.lobby.controller
 		// -------------------------------------------------------------------------------------------------------- 属性
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
-		
-		private var data:DataExchange;
 		
 		private var socket:MainSocketModel;
 		
@@ -86,7 +83,6 @@ package com.ourgame.mahjong.lobby.controller
 			this.register(RoomMethod.ENTER_ROOM, ENTER_ROOM);
 			this.register(RoomMethod.UPDATE_PLAYER_COUNT, UPDATE_PLAYER_COUNT);
 			
-			this.data = ((this.context as State).manager as Main).info.data;
 			this.socket = this.context.getModel(MainSocketModel) as MainSocketModel;
 		}
 		
@@ -102,15 +98,15 @@ package com.ourgame.mahjong.lobby.controller
 			var so:SharedObject = SharedObject.getLocal("OurgameMahjong");
 			
 			var body:CReqLogin = new CReqLogin();
-			body.ourgameId = this.data.ourgameID;
-			body.username = this.data.username;
-			body.rolename = this.data.rolename;
-			body.nickname = this.data.nickname;
-			body.ticket = Base64.decode(this.data.ticket);
+			body.ourgameId = CommonData.ourgameID;
+			body.username = CommonData.username;
+			body.rolename = CommonData.rolename;
+			body.nickname = CommonData.nickname;
+			body.ticket = Base64.decode(CommonData.ticket);
 			body.sessionKey = so.data["session"];
-			body.headImage = this.data.user.headImage;
-			body.gender = this.data.user.sex;
-			body.channelId = this.data.channelID;
+			body.headImage = CommonData.user.headImage;
+			body.gender = CommonData.user.sex;
+			body.channelId = CommonData.channelID;
 			body.version = 1;
 			body.force = true;
 			body.antiAddict = (Application.stage.loaderInfo.parameters["CMStatus"] != 0);
@@ -268,12 +264,12 @@ package com.ourgame.mahjong.lobby.controller
 				so.data["session"] = body.sessionKey;
 				so.flush();
 				
-				this.data.user.nickname = this.data.nickname;
-				this.data.user.id = body.userId.low;
-				this.data.user.coins = body.money;
-				this.data.user.experience = body.experience;
-				this.data.user.level = body.level;
-				this.data.user.masterScore = body.materScore;
+				CommonData.user.nickname = CommonData.nickname;
+				CommonData.user.id = body.userId.low;
+				CommonData.user.coins = body.money;
+				CommonData.user.experience = body.experience;
+				CommonData.user.level = body.level;
+				CommonData.user.masterScore = body.materScore;
 				
 				this.notify(LobbyMethod.LOGIN_SUCCESS);
 			}
@@ -328,7 +324,7 @@ package com.ourgame.mahjong.lobby.controller
 			
 			Log.debug("请求房间列表结果", body);
 			
-			this.data.roomList.clear();
+			CommonData.roomList = new ArrayList();
 			
 			for each (var room:Room in body.rooms)
 			{
@@ -339,11 +335,11 @@ package com.ourgame.mahjong.lobby.controller
 				info.playerCount = room.userAmount;
 				info.buyin = room.enterBuyIn;
 				info.rate = room.unitValue;
-				this.data.roomList.add(info);
+				CommonData.roomList.add(info);
 				
-				if (this.data.room != null && this.data.room.id == info.id)
+				if (CommonData.room != null && CommonData.room.id == info.id)
 				{
-					this.data.room = info;
+					CommonData.room = info;
 				}
 			}
 			
@@ -359,13 +355,13 @@ package com.ourgame.mahjong.lobby.controller
 			
 			if (body.result == 0)
 			{
-				this.data.room = this.data.getRoomByID(body.roomId);
+				CommonData.room = CommonData.getRoomByID(body.roomId);
 				
-				if (this.data.room.type == RoomType.AUTO)
+				if (CommonData.room.type == RoomType.AUTO)
 				{
-					this.data.user.seat = 0;
-					this.data.table = new TableInfo();
-					this.data.table.userList.add(this.data.user);
+					CommonData.user.seat = 0;
+					CommonData.table = new TableInfo();
+					CommonData.table.userList.add(CommonData.user);
 				}
 				
 				this.notify(RoomMethod.ENTER_ROOM_SUCCESS);

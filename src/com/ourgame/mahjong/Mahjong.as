@@ -1,7 +1,7 @@
 package com.ourgame.mahjong
 {
-	import com.ourgame.mahjong.libaray.DataExchange;
 	import com.ourgame.mahjong.libaray.GameLoader;
+	import com.ourgame.mahjong.libaray.data.CommonData;
 	import com.ourgame.mahjong.libaray.vo.GameInfo;
 	import com.wecoit.data.XmlValue;
 	import com.wecoit.debug.Log;
@@ -13,7 +13,7 @@ package com.ourgame.mahjong
 	import flash.events.ProgressEvent;
 	import flash.ui.Keyboard;
 	
-	[SWF(width="960", height="600", backgroundColor="#000000", frameRate="25")]
+	[SWF(width="960", height="600", backgroundColor="#000000", frameRate="24")]
 	
 	/**
 	 * 麻将启动程序
@@ -31,8 +31,6 @@ package com.ourgame.mahjong
 		
 		// -------------------------------------------------------------------------------------------------------- 属性
 		
-		public var data:DataExchange;
-		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
 		private var loader:GameLoader;
@@ -49,22 +47,21 @@ package com.ourgame.mahjong
 			this.stage.scaleMode = StageScaleMode.NO_SCALE;
 			this.stage.align = StageAlign.TOP_LEFT;
 			
-			this.data = new DataExchange();
-			
-			this.startup(new XmlValue(<game name="Main">data/assets.xml</game>));
-			
 			Log.instance.listen(this.stage, Keyboard.END, true, true);
+			
+			CommonData.base = new GameInfo(new XmlValue(<game name="Main">data/assets.xml</game>));
+			this.startup();
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
 		
-		public function startup(info:XmlValue):void
+		public function startup():void
 		{
 			this.loader = new GameLoader();
 			this.loader.addEventListener(BytesEvent.ERROR, onError, false, 0, true);
 			this.loader.addEventListener(ProgressEvent.PROGRESS, onProgress, false, 0, true);
 			this.loader.addEventListener(BytesEvent.COMPLETE, onComplete, false, 0, true);
-			this.loader.load(new GameInfo(info, this.data));
+			this.loader.load(CommonData.base);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 函数

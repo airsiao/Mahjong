@@ -41,7 +41,6 @@ package com.ourgame.mahjong.main.state
 			super(key);
 			
 			this.add(new LobbyState());
-			
 			this.add(new RoomState());
 		}
 		
