@@ -1,21 +1,14 @@
-package com.ourgame.mahjong
+package com.ourgame.mahjong.view
 {
-	import com.ourgame.mahjong.state.MainState;
-	import com.wecoit.debug.Log;
-	import com.wecoit.mvc.Application;
-	
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.system.Security;
-	import flash.ui.Keyboard;
-	
-	[SWF(width="960", height="685", backgroundColor="#000000", frameRate="24")]
+	import com.ourgame.mahjong.method.MainMethod;
+	import com.ourgame.mahjong.model.GameModel;
+	import com.wecoit.mvc.View;
 	
 	/**
-	 * 麻将启动程序
+	 * 选择器视图
 	 * @author SiaoLeon
 	 */
-	public class Mahjong extends Application
+	public class SelectorView extends View
 	{
 		// -------------------------------------------------------------------------------------------------------- 静态常量
 		
@@ -34,26 +27,19 @@ package com.ourgame.mahjong
 		/**
 		 * 构造函数
 		 */
-		public function Mahjong()
+		public function SelectorView()
 		{
-			super(new MainState());
-			
-			Security.allowDomain("*");
+			super();
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
 		
-		// -------------------------------------------------------------------------------------------------------- 函数
-		
-		override protected function onAddedToStage():void
+		public function show():void
 		{
-			super.onAddedToStage();
-			
-			Application.stage.scaleMode = StageScaleMode.NO_SCALE;
-			Application.stage.align = StageAlign.TOP_LEFT;
-			
-			Log.instance.listen(this.stage, Keyboard.END, true, true);
+			this.notify(MainMethod.ENTER_GAME, (this.context.getModel(GameModel) as GameModel).getGameByID(1));
 		}
+	
+		// -------------------------------------------------------------------------------------------------------- 函数
 	
 	}
 }

@@ -31,14 +31,11 @@
         </excludedEntries>
       </libraryPathEntry>
       <libraryPathEntry kind="1" linkType="1" path="lib"/>
-      <libraryPathEntry kind="3" linkType="1" path="/MahjongProtocol/bin/MahjongProtocol.swc" useDefaultLinkType="false"/>
-      <libraryPathEntry kind="3" linkType="1" path="/MahjongLibaray/bin/MahjongLibaray.swc" useDefaultLinkType="false"/>
       <libraryPathEntry kind="3" linkType="1" path="/Weco-AS3-Libaray/bin/Weco-AS3-Libaray.swc" useDefaultLinkType="false"/>
     </libraryPath>
     <sourceAttachmentPath/>
   </compiler>
   <applications>
-    <application path="com/ourgame/mahjong/Main.as"/>
     <application path="com/ourgame/mahjong/Mahjong.as"/>
   </applications>
   <modules/>

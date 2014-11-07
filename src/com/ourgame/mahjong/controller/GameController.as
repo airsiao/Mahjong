@@ -1,21 +1,18 @@
-package com.ourgame.mahjong
+package com.ourgame.mahjong.controller
 {
+	import com.ourgame.mahjong.method.MainMethod;
+	import com.ourgame.mahjong.model.GameModel;
 	import com.ourgame.mahjong.state.MainState;
+	import com.ourgame.mahjong.vo.GameInfo;
 	import com.wecoit.debug.Log;
-	import com.wecoit.mvc.Application;
-	
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.system.Security;
-	import flash.ui.Keyboard;
-	
-	[SWF(width="960", height="685", backgroundColor="#000000", frameRate="24")]
+	import com.wecoit.mvc.Controller;
+	import com.wecoit.mvc.core.INotice;
 	
 	/**
-	 * 麻将启动程序
+	 * 游戏控制器
 	 * @author SiaoLeon
 	 */
-	public class Mahjong extends Application
+	public class GameController extends Controller
 	{
 		// -------------------------------------------------------------------------------------------------------- 静态常量
 		
@@ -34,25 +31,41 @@ package com.ourgame.mahjong
 		/**
 		 * 构造函数
 		 */
-		public function Mahjong()
+		public function GameController()
 		{
-			super(new MainState());
-			
-			Security.allowDomain("*");
+			super();
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
 		
+		override public function onAdd():void
+		{
+			this.register(MainMethod.ENTER_GAME, ENTER_GAME);
+			this.register(MainMethod.LOAD_GAME_ERROR, LOAD_GAME_ERROR);
+			this.register(MainMethod.LOAD_GAME_COMPLETE, LOAD_GAME_COMPLETE);
+		}
+		
 		// -------------------------------------------------------------------------------------------------------- 函数
 		
-		override protected function onAddedToStage():void
+		private function ENTER_GAME(notice:INotice):void
 		{
-			super.onAddedToStage();
+			var game:GameInfo = notice.params;
 			
-			Application.stage.scaleMode = StageScaleMode.NO_SCALE;
-			Application.stage.align = StageAlign.TOP_LEFT;
+			Log.debug("进入游戏：", game.name);
 			
-			Log.instance.listen(this.stage, Keyboard.END, true, true);
+			(this.context.getModel(GameModel) as GameModel).load(game);
+		}
+		
+		private function LOAD_GAME_ERROR(notice:INotice):void
+		{
+		
+		}
+		
+		private function LOAD_GAME_COMPLETE(notice:INotice):void
+		{
+			var game:GameInfo = (this.context.getModel(GameModel) as GameModel).current;
+			
+			(this.context as MainState).game.play(game);
 		}
 	
 	}

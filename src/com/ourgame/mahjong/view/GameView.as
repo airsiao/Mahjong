@@ -1,21 +1,16 @@
-package com.ourgame.mahjong
+package com.ourgame.mahjong.view
 {
-	import com.ourgame.mahjong.state.MainState;
-	import com.wecoit.debug.Log;
-	import com.wecoit.mvc.Application;
-	
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.system.Security;
-	import flash.ui.Keyboard;
-	
-	[SWF(width="960", height="685", backgroundColor="#000000", frameRate="24")]
+	import com.ourgame.mahjong.model.ProxyModel;
+	import com.ourgame.mahjong.ui.LayerManager;
+	import com.ourgame.mahjong.vo.GameInfo;
+	import com.wecoit.core.FlashPlayer;
+	import com.wecoit.mvc.View;
 	
 	/**
-	 * 麻将启动程序
+	 * 游戏视图
 	 * @author SiaoLeon
 	 */
-	public class Mahjong extends Application
+	public class GameView extends View
 	{
 		// -------------------------------------------------------------------------------------------------------- 静态常量
 		
@@ -34,26 +29,33 @@ package com.ourgame.mahjong
 		/**
 		 * 构造函数
 		 */
-		public function Mahjong()
+		public function GameView()
 		{
-			super(new MainState());
-			
-			Security.allowDomain("*");
+			super();
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
 		
-		// -------------------------------------------------------------------------------------------------------- 函数
-		
-		override protected function onAddedToStage():void
+		override public function onAdd():void
 		{
-			super.onAddedToStage();
-			
-			Application.stage.scaleMode = StageScaleMode.NO_SCALE;
-			Application.stage.align = StageAlign.TOP_LEFT;
-			
-			Log.instance.listen(this.stage, Keyboard.END, true, true);
+			LayerManager.instance.game.proxy = this.context.getModel(ProxyModel) as ProxyModel;
 		}
+		
+		override public function onRemove():void
+		{
+			LayerManager.instance.game.proxy = null;
+		}
+		
+		public function play(game:GameInfo):void
+		{
+			LayerManager.instance.game.clear();
+			
+			LayerManager.instance.game.addChild(game.main);
+			
+			FlashPlayer.GC();
+		}
+	
+		// -------------------------------------------------------------------------------------------------------- 函数
 	
 	}
 }

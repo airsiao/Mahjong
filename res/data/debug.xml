@@ -2,28 +2,18 @@
 <debug>
 
 	<!-- 联众ID -->
-	<option name="ourgameID">lx0026</option>
+	<option name="ourgameID">lx0037</option>
 	<!-- 用户名 -->
-	<option name="username">lx0026</option>
+	<option name="username">lx0037</option>
 	<!-- 角色名 -->
-	<option name="rolename">lx0026</option>
+	<option name="rolename">lx0037</option>
 	<!-- 昵称 -->
-	<option name="nickname">lx0026</option>
+	<option name="nickname">lx0037</option>
 	<!-- 证书 -->
 	<option name="ticket">
 	</option>
 
 	<!-- 渠道号 -->
 	<option name="channelID">0</option>
-
-	<!-- 服务器地址 -->
-	<option name="ServerHost">172.28.14.82</option> 
-	<!-- 服务器端口 -->
-	<option name="ServerPort">22411</option>
-
-	<!-- 公共聊天服务器地址 -->
-	<option name="ChatServerHost">172.28.41.20</option>
-	<!-- 公共聊天服务器端口 -->
-	<option name="ChatServerPort">22376</option>
 
 </debug>

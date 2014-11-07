@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+
+	<!-- 用户默认头像 -->
+	<option name="HeadImageDefault">images/Head.png</option>
+	<!-- 用户头像服务 -->
+	<option name="HeadImageApi">http://hyapp.gfs.lianzhong.com/AvatarServer/services/GetAvatar.ashx</option>
+	
+</config>

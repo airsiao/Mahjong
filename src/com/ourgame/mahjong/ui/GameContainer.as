@@ -1,21 +1,13 @@
-package com.ourgame.mahjong
+package com.ourgame.mahjong.ui
 {
-	import com.ourgame.mahjong.state.MainState;
-	import com.wecoit.debug.Log;
-	import com.wecoit.mvc.Application;
-	
-	import flash.display.StageAlign;
-	import flash.display.StageScaleMode;
-	import flash.system.Security;
-	import flash.ui.Keyboard;
-	
-	[SWF(width="960", height="685", backgroundColor="#000000", frameRate="24")]
+	import com.ourgame.mahjong.model.ProxyModel;
+	import com.wecoit.display.DisplayElement;
 	
 	/**
-	 * 麻将启动程序
+	 * 游戏容器
 	 * @author SiaoLeon
 	 */
-	public class Mahjong extends Application
+	public class GameContainer extends DisplayElement
 	{
 		// -------------------------------------------------------------------------------------------------------- 静态常量
 		
@@ -27,6 +19,8 @@ package com.ourgame.mahjong
 		
 		// -------------------------------------------------------------------------------------------------------- 属性
 		
+		public var proxy:ProxyModel;
+		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
 		// -------------------------------------------------------------------------------------------------------- 构造
@@ -34,26 +28,14 @@ package com.ourgame.mahjong
 		/**
 		 * 构造函数
 		 */
-		public function Mahjong()
+		public function GameContainer()
 		{
-			super(new MainState());
-			
-			Security.allowDomain("*");
+			super();
 		}
-		
+	
 		// -------------------------------------------------------------------------------------------------------- 方法
-		
+	
 		// -------------------------------------------------------------------------------------------------------- 函数
-		
-		override protected function onAddedToStage():void
-		{
-			super.onAddedToStage();
-			
-			Application.stage.scaleMode = StageScaleMode.NO_SCALE;
-			Application.stage.align = StageAlign.TOP_LEFT;
-			
-			Log.instance.listen(this.stage, Keyboard.END, true, true);
-		}
 	
 	}
 }
