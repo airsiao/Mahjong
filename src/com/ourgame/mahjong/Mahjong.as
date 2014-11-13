@@ -1,7 +1,11 @@
 package com.ourgame.mahjong
 {
+	import com.ourgame.mahjong.data.CoreData;
 	import com.ourgame.mahjong.state.MainState;
+	import com.wecoit.core.AssetsManager;
 	import com.wecoit.debug.Log;
+	import com.wecoit.events.BytesEvent;
+	import com.wecoit.loader.BytesLoader;
 	import com.wecoit.mvc.Application;
 	
 	import flash.display.StageAlign;
@@ -29,6 +33,8 @@ package com.ourgame.mahjong
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
 		
+		private var loader:BytesLoader;
+		
 		// -------------------------------------------------------------------------------------------------------- 构造
 		
 		/**
@@ -36,9 +42,12 @@ package com.ourgame.mahjong
 		 */
 		public function Mahjong()
 		{
-			super(new MainState());
-			
 			Security.allowDomain("*");
+			
+			this.loader = new BytesLoader();
+			this.loader.addEventListener(BytesEvent.ERROR, onError);
+			this.loader.addEventListener(BytesEvent.COMPLETE, onComplete);
+			this.loader.load(CoreData.UI);
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 方法
@@ -53,6 +62,28 @@ package com.ourgame.mahjong
 			Application.stage.align = StageAlign.TOP_LEFT;
 			
 			Log.instance.listen(this.stage, Keyboard.END, true, true);
+		}
+		
+		private function onError(event:BytesEvent):void
+		{
+			Log.error("加载资源错误", this.loader.url);
+			
+			this.loader.removeEventListener(BytesEvent.ERROR, onError);
+			this.loader.removeEventListener(BytesEvent.COMPLETE, onComplete);
+			this.loader = null;
+		}
+		
+		private function onComplete(event:BytesEvent):void
+		{
+			Log.error("加载资源完成");
+			
+			AssetsManager.instance.saveAsset("UI", this.loader.content);
+			
+			this.loader.removeEventListener(BytesEvent.ERROR, onError);
+			this.loader.removeEventListener(BytesEvent.COMPLETE, onComplete);
+			this.loader = null;
+			
+			this.rootState = new MainState();
 		}
 	
 	}

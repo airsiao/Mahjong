@@ -55,15 +55,6 @@ package com.ourgame.mahjong.model
 		}
 		
 		/**
-		 * 昵称
-		 * @return
-		 */
-		public function get nickname():String
-		{
-			return (this.context.getModel(UserModel) as UserModel).nickname;
-		}
-		
-		/**
 		 * 证书(长)
 		 */
 		public function get ticket():String
@@ -80,11 +71,20 @@ package com.ourgame.mahjong.model
 		}
 		
 		/**
+		 * 昵称
+		 * @return
+		 */
+		public function get nickname():String
+		{
+			return (this.context.getModel(UserModel) as UserModel).user.nickname;
+		}
+		
+		/**
 		 * 头像
 		 */
 		public function get headImage():String
 		{
-			return (this.context.getModel(UserModel) as UserModel).headImage;
+			return (this.context.getModel(UserModel) as UserModel).user.headImage;
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 变量

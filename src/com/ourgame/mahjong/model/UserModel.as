@@ -2,6 +2,7 @@ package com.ourgame.mahjong.model
 {
 	import com.ourgame.mahjong.data.CoreData;
 	import com.ourgame.mahjong.method.MainMethod;
+	import com.ourgame.mahjong.vo.UserInfo;
 	import com.wecoit.core.AssetsManager;
 	import com.wecoit.core.FlashPlayer;
 	import com.wecoit.data.Config;
@@ -63,16 +64,6 @@ package com.ourgame.mahjong.model
 			return this._rolename;
 		}
 		
-		private var _nickname:String;
-		
-		/**
-		 * 昵称
-		 */
-		public function get nickname():String
-		{
-			return this._nickname;
-		}
-		
 		private var _ticket:String;
 		
 		/**
@@ -93,14 +84,14 @@ package com.ourgame.mahjong.model
 			return this._channelID;
 		}
 		
-		private var _headImage:String;
+		private var _user:UserInfo;
 		
 		/**
-		 * 头像
+		 * 用户信息
 		 */
-		public function get headImage():String
+		public function get user():UserInfo
 		{
-			return this._headImage;
+			return this._user;
 		}
 		
 		// -------------------------------------------------------------------------------------------------------- 变量
@@ -133,6 +124,8 @@ package com.ourgame.mahjong.model
 				}
 			}
 			
+			this._user = new UserInfo();
+			
 			this.loader = new BytesLoader();
 			this.loader.addEventListener(BytesEvent.ERROR, onLoadError);
 			this.loader.addEventListener(BytesEvent.COMPLETE, onLoadComplete);
@@ -150,6 +143,8 @@ package com.ourgame.mahjong.model
 				{
 				}
 			}
+			
+			this._user = null;
 			
 			this.loader.removeEventListener(BytesEvent.ERROR, onLoadError);
 			this.loader.removeEventListener(BytesEvent.COMPLETE, onLoadComplete);
@@ -190,11 +185,11 @@ package com.ourgame.mahjong.model
 			this._ourgameID = Application.stage.loaderInfo.parameters["OurgameID"];
 			this._username = Application.stage.loaderInfo.parameters["UserName"];
 			this._rolename = Application.stage.loaderInfo.parameters["RoleName"];
-			this._nickname = Application.stage.loaderInfo.parameters["NickName"];
 			this._ticket = Application.stage.loaderInfo.parameters["Ticket"];
 			this._channelID = Application.stage.loaderInfo.parameters["ChannelID"];
+			this.user.nickname = Application.stage.loaderInfo.parameters["NickName"];
 			
-			if (this.ourgameID == null || this.ourgameID == "" || this.rolename == null || this.rolename == "" || this.nickname == null || this.nickname == "")
+			if (this.ourgameID == null || this.ourgameID == "" || this.rolename == null || this.rolename == "")
 			{
 				this.notify(MainMethod.LOAD_USERINFO_ERROR);
 			}
@@ -220,9 +215,9 @@ package com.ourgame.mahjong.model
 			this._ourgameID = config.getValue("ourgameID");
 			this._username = config.getValue("username");
 			this._rolename = config.getValue("rolename");
-			this._nickname = config.getValue("nickname");
 			this._ticket = config.getValue("ticket");
 			this._channelID = config.getValue("channelID");
+			this.user.nickname = config.getValue("nickname");
 			
 			AssetsManager.instance.saveAsset(config.name, this.loader.content);
 			
@@ -271,7 +266,7 @@ package com.ourgame.mahjong.model
 				
 				Log.debug("用户头像地址获取成功", head["Url"]);
 				
-				this._headImage = head["Url"];
+				this.user.headImage = head["Url"];
 			}
 		}
 		
@@ -279,7 +274,7 @@ package com.ourgame.mahjong.model
 		{
 			Log.error("用户头像地址获取失败");
 			
-			this._headImage = AssetsManager.instance.getConfig("config").getString("HeadImageDefault");
+			this.user.headImage = AssetsManager.instance.getConfig("config").getString("HeadImageDefault");
 		}
 	
 	}

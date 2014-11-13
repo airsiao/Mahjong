@@ -77,9 +77,9 @@ package com.ourgame.mahjong.controller
 		{
 			var model:UserModel = this.context.getModel(UserModel) as UserModel;
 			
-			Log.info("用户数据加载完成", "帐号：" + model.ourgameID, "用户名：" + model.username, "角色名：" + model.rolename, "昵称：" + model.nickname);
+			Log.info("用户数据加载完成", "帐号：" + model.ourgameID, "用户名：" + model.username, "角色名：" + model.rolename, "昵称：" + model.user.nickname);
 			
-			(this.context as MainState).common.show();
+			(this.context as MainState).common.bindData();
 			(this.context as MainState).selector.show();
 		}
 	

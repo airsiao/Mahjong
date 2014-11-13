@@ -58,7 +58,7 @@ package com.ourgame.mahjong.controller
 		
 		private function LOAD_GAME_ERROR(notice:INotice):void
 		{
-		
+			Log.error("加载游戏失败");
 		}
 		
 		private function LOAD_GAME_COMPLETE(notice:INotice):void

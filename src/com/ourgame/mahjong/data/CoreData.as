@@ -32,6 +32,11 @@ package com.ourgame.mahjong.data
 		 * 游戏列表文件路径
 		 */
 		public static const GAMES:String = "data/games.xml";
+		
+		/**
+		 * 资源文件路径
+		 */
+		public static const UI:String = "assets/ui.swf";
 	
 	}
 }
